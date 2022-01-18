@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace -  -->
+<mapper namespace="e01.DeptMapper">
+    <!-- id 기반으로 쿼리 식별하여 자바에서 호출 -->
+    <!-- 실행 => 행뽑아서 Dto 저장 -->
+    <select id="selectAllDesc" resultType="e01.dto.DeptDTO">
+        select deptno, dname, loc
+        from dept
+        order by deptno desc
+    </select>
+    <select id="selectAllAsc" resultType="e01.dto.DeptDTO">
+        select deptno, dname , loc
+        from dept
+        order by deptno
+    </select>
+    <select id="selectOneByDeptNo" resultType="e01.dto.DeptDTO" parameterType="int">
+        select deptno, dname , loc
+        from dept
+        where deptno = #{deptno}
+    </select>
+    <!-- string <= String alias /  ref: docs - configuration xml -->
+    <!--
+    short Short
+    int Integer
+    integer Integer
+    double Double
+    float Float
+    boolean Boolean
+    date Date
+    decimal BigDecimal
+    bigdecimal BigDecimal
+    object Object
+    map Map
+    hashmap HashMap
+    list List
+    arraylist ArrayList
+    collection Collection
+    iterator Iterato
+    -->
+    <select id="selectByDName" resultType="e01.dto.DeptDTO" parameterType="string">
+        select deptno, dname , loc
+        from dept
+        where dname = #{dname}
+    </select>
+
+    <!-- like query-->
+    <select id="selectByContainsDName" resultType="e01.dto.DeptDTO" parameterType="string">
+        select deptno, dname , loc
+        from dept
+        where dname like '%' || #{dname} || '%'
+    </select>
+
+    <!-- param to DTO -->
+    <select id="selectByDNameLoc" resultType="e01.dto.DeptDTO" parameterType="e01.dto.DeptDTO">
+        select deptno, dname , loc
+        from dept
+        where dname = #{dName} and loc = #{loc}
+        --have to use dto member in binding variable
+    </select>
+    <insert id="insert" parameterType="e01.dto.DeptDTO">
+        insert into dept (deptno , dname , loc)
+        values ( #{deptNo} , #{dName} , #{loc})
+    </insert>
+    <update id="update" parameterType="e01.dto.DeptDTO">
+        update dept
+        set dname = #{dName}
+        where deptno = #{deptNo}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from dept
+        where deptno = #{var}
+    </delete>
+</mapper>
