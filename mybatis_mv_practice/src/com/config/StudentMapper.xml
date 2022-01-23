@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.StudentMapper">
+
+    <!-- Select All -->
+    <select id="selectAllAsc" resultType="StudentDTO">
+        select student_no,
+               student_name,
+               substr(student_ssn, 1, 8) || '******'   as student_ssn,
+               substr(student_address, 1, 10) || '...' as student_address,
+               to_char(entrance_date, 'yyyy/mm/dd')    as entrance_date,
+               absence_yn
+        from tb_student
+        order by 1
+    </select>
+
+    <!-- Select Like Name -->
+    <select id="selectByStudentNameContains" resultType="StudentDTO" parameterType="string">
+        select student_no,
+               student_name,
+               substr(student_ssn, 1, 8) || '******'   as student_ssn,
+               substr(student_address, 1, 10) || '...' as student_address,
+               to_char(entrance_date, 'yyyy/mm/dd')    as entrance_date,
+               absence_yn
+        from tb_student
+        where student_name like '%' || #{name} || '%'
+    </select>
+
+    <!-- Select Between entranceDate -->
+    <select id="selectByEntranceDateBetween" resultType="StudentDTO" parameterType="map">
+        select student_no,
+               student_name,
+               substr(student_ssn, 1, 8) || '******'   as student_ssn,
+               substr(student_address, 1, 10) || '...' as student_address,
+               to_char(entrance_date, 'yyyy/mm/dd')    as entrance_date,
+               absence_yn
+        from tb_student
+        where to_char(entrance_date, 'YYYY') between #{startDate} and #{endDate}
+    </select>
+
+    <!-- Select ID In  -->
+    <select id="selectByIdIn" resultType="StudentDTO" parameterType="arraylist">
+        select student_no,
+        student_name,
+        substr(student_ssn, 1, 8) || '******' as student_ssn,
+        substr(student_address, 1, 10) || '...' as student_address,
+        to_char(entrance_date, 'yyyy/mm/dd') as entrance_date,
+        absence_yn
+        from tb_student
+        <where>
+            student_no IN
+            <foreach item="sid" index="index" collection="list"
+                     open="(" separator="," close=")">
+                #{sid}
+            </foreach>
+        </where>
+    </select>
+
+    <!-- Update AbsenceYn Id In -->
+    <update id="updateAbsenceYnByIdIn" parameterType="arraylist">
+        update tb_student
+        set absence_yn = 'Y'
+        <where>
+            student_no IN
+            <foreach item="sid" index="index" collection="list"
+                     open="(" separator="," close=")">
+                #{sid}
+            </foreach>
+        </where>
+    </update>
+
+    <!-- Select grade info from student, class, grade -->
+    <select id="selectGradeByStudentId" resultType="StudentGradeDTO" parameterType="string">
+        select term_no,
+               s.student_no              as student_no,
+               student_name,
+               rpad(class_name, 15, ' ') as class_name,
+               point,
+               (case
+                    when point >= 4.0 then 'A'
+                    when point between 3.5 and 3.9 then 'B'
+                    when point between 3.0 and 3.4 then 'C'
+                    when point between 2.0 and 2.9 then 'D'
+                    else 'F'
+                   end) || ' 학점'         as grade
+        from (
+                 select student_no, student_name
+                 from tb_student
+                 where student_no = #{var}) s
+                 join tb_grade g
+                      on g.student_no = s.student_no
+                 join tb_class c
+                      on c.class_no = g.class_no
+        order by 1
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.DepartmentMapper">
+    <update id="updateAllCapacity">
+        update tb_department
+        <set>
+            <choose>
+                <when test="capacity >= 26 and 30 >= capacity">capacity = capacity + 3</when>
+                <when test="capacity >= 21 and 25 >= capacity">capacity = capacity + 4</when>
+                <when test="capacity >= 0 and 20 >= capacity">capacity = capacity + 5</when>
+            </choose>
+        </set>
+    </update>
+</mapper>
