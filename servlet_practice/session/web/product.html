@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    window.onload = () => {
+        document.getElementById("id-btn-rewrite").addEventListener('click', () => {
+            Array.from(document.querySelectorAll("input[type='text']")).forEach(value => value.value = "");
+        }, false);
+    }
+
+</script>
+<style>
+    .bold {
+        font-weight: bolder;
+    }
+</style>
+<body>
+<form action="ProductAddServlet" method="post">
+    <table border="1">
+        <tr>
+            <td class="bold">상품명</td>
+            <td><input type="text" name="productname"></td>
+        </tr>
+        <tr>
+            <td class="bold">상품ID</td>
+            <td><input type="text" name="productid"></td>
+        </tr>
+        <tr>
+            <td class="bold">상품수량</td>
+            <td><input type="text" name="productamount"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="상품정보전송">
+                <input id="id-btn-rewrite" type="button" value="다시입력">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
