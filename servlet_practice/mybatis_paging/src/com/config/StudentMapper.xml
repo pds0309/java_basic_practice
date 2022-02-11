@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.StudentMapper">
+
+	<!-- 20개만 뽑기-->
+	<!--
+	<![CDATA[
+	SELECT *
+	FROM TB_STUDENT
+	WHERE ROWNUM <= 20
+	ORDER BY STUDENT_NO;
+	]]>
+	-->
+
+	<select id="pageable" resultType="int">
+		<![CDATA[
+		select count(*)
+		from tb_student
+		where rownum <= 20
+		order by student_no asc
+		]]>
+	</select>
+
+	<!-- Select All -->
+	<select id="selectAllAsc" resultType="StudentDTO">
+		select student_no,
+			   student_name,
+			   substr(student_ssn, 1, 8) || '******'   as student_ssn,
+			   substr(student_address, 1, 10) || '...' as student_address,
+			   to_char(entrance_date, 'yyyy/mm/dd')    as entrance_date,
+			   absence_yn
+		from tb_student
+		order by 1
+	</select>
+
+	<!-- Select All -->
+	<select id="selectAllAscPageable" resultType="StudentDTO" parameterType="int">
+		<![CDATA[
+		select student_no,
+			   student_name,
+			   substr(student_ssn, 1, 8) || '******'   as student_ssn,
+			   substr(student_address, 1, 10) || '...' as student_address,
+			   to_char(entrance_date, 'yyyy/mm/dd')    as entrance_date,
+			   absence_yn
+		from tb_student
+		where rownum <= #{var}
+		order by student_no asc
+		]]>
+	</select>
+
+</mapper>
