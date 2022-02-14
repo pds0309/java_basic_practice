@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="com/config/jdbc.properties"/>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="com.dto.ProductDTO" alias="ProductDTO"/>
+        <typeAlias type="com.dto.ProductQuantityDTO" alias="ProductQuantityDTO"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.oracle}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.userid}"/>
+                <property name="password" value="${jdbc.passwd}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/config/ProductMapper.xml"/>
+    </mappers>
+</configuration>

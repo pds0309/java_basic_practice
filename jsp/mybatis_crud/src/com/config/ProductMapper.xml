@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.ProductMapper">
+    <select id="selectAllAsc" resultType="ProductDTO">
+        select prodid, prodname, price, quantity
+        from myproduct
+        order by 1
+    </select>
+
+    <select id="selectQuantityById" resultType="int" parameterType="string">
+        select quantity
+        from myproduct
+        where prodid = #{var}
+    </select>
+
+    <delete id="deleteOneById" parameterType="string">
+        delete
+        from myproduct
+        where prodid = #{var}
+    </delete>
+
+    <delete id="deleteByIdIn" parameterType="arraylist">
+        delete
+        from myproduct
+        <where>
+            prodid in
+            <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <delete id="updateQuantityById" parameterType="ProductQuantityDTO">
+        update myproduct
+        set quantity = #{quantity}
+        where prodid = #{prodid}
+    </delete>
+</mapper>
